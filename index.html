@@ -445,42 +445,7 @@
     <script>
         let data = [];
         let dataLoaded = false;
-        let rawData = [];
-
-        // Fonction pour parser le CSV de manière plus robuste
-        function parseCSV(csvText) {
-            const lines = csvText.trim().split('\n');
-            const result = [];
-            
-            // Détection du séparateur
-            const firstLine = lines[0];
-            const semicolonCount = (firstLine.match(/;/g) || []).length;
-            const commaCount = (firstLine.match(/,/g) || []).length;
-            const separator = semicolonCount > commaCount ? ';' : ',';
-            
-            console.log(`Séparateur détecté: "${separator}"`);
-            
-            // Parse headers
-            const headers = lines[0].split(separator).map(h => h.trim().replace(/"/g, ''));
-            console.log('Headers:', headers);
-            
-            // Parse data
-            for (let i = 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line) continue;
-                
-                const values = line.split(separator).map(v => v.trim().replace(/"/g, ''));
-                const row = {};
-                
-                headers.forEach((header, index) => {
-                    row[header] = values[index] || '';
-                });
-                
-                result.push(row);
-            }
-            
-            return { headers, data: result };
-        }
+     //   let rawData = []; // plus utilisé
 
         // Chargement des données depuis le JSON
 fetch("heures_creuses_communes.json") // mets ici le chemin si le fichier est dans un sous-dossier
