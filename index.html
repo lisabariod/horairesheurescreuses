@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heures Creuses Enedis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-50px, -50px) rotate(360deg); }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            max-width: 800px;
+            width: 100%;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .container:hover {
+            transform: translateY(-8px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .search-wrapper {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        #search {
+            flex: 1;
+            min-width: 280px;
+            padding: 18px 24px;
+            border: 2px solid #e0e0e0;
+            border-radius: 60px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        #search:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 4px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        #search::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        .search-btn {
+            padding: 18px 35px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .search-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .search-btn:hover::before {
+            left: 100%;
+        }
+
+        .status {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .status.loading {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+            color: #f57c00;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .status.ready {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.1));
+            color: #2e7d32;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status.error {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(229, 57, 53, 0.1));
+            color: #c62828;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+ #result:empty {
+    display: none;
+}
+
+#result {
+    min-height: 80px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+
+
+        #result p {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 30px;
+            font-size: 16px;
+        }
+
+        .result-item {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.05));
+            border-radius: 20px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-item:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.08));
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .city-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .city-name {
+            color: #333;
+            font-size: 20px;
+            font-weight: 700;
+            flex-grow: 1;
+        }
+
+        .postal-code {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .time-slots {
+            display: grid;
+            gap: 12px;
+        }
+
+        .time-slot {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 16px 20px;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .time-slot:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .slot-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .slot-time {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-style: italic;
+            background: linear-gradient(135deg, rgba(158, 158, 158, 0.1), rgba(189, 189, 189, 0.05));
+            border-radius: 15px;
+            border: 2px dashed #ddd;
+        }
+
+        .suggestions {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.08), rgba(30, 136, 229, 0.05));
+            border-radius: 15px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .suggestions h4 {
+            color: #1976D2;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .suggestion-item {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 15px;
+            margin: 4px;
+            border-radius: 20px;
+            color: #555;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(33, 150, 243, 0.2);
+        }
+
+        .suggestion-item:hover {
+            background: #2196F3;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+          .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .search-wrapper {
+                flex-direction: column;
+            }
+            
+            #search, .search-btn {
+                width: 100%;
+            }
+            
+            h1 {
+                font-size: 2em;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .city-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.4s ease-out;
+        }
+        .autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    list-style: none;
+}
+
+.autocomplete-list li {
+    padding: 12px 18px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.autocomplete-list li:hover {
+    background: #f0f0f0;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span>⚡</span>
+                <span>Heures Creuses Enedis</span>
+                <span>🏠</span>
+            </h1>
+            <p class="subtitle">Trouvez facilement vos plages d'heures creuses</p>
+        </div>
+        
+        <div id="status" class="status loading">
+            <div class="loader"></div>
+            Chargement des données...
+        </div>
+        
+        <div class="search-container">
+            <div class="search-wrapper">
+                <input type="text" id="search" placeholder="🔍 Commune ou code postal (ex: Paris, 75001...)" />
+                <ul id="autocomplete-list" class="autocomplete-list"></ul>
+                <button class="search-btn" onclick="searchHeures()">
+                    <span>Rechercher</span>
+                </button>
+            </div>
+        </div>
+        
+        <div id="result"></div>
+          </div>
+
+    <script>
+        let data = [];
+        let dataLoaded = false;
+        let rawData = [];
+
+        // Fonction pour parser le CSV de manière plus robuste
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const result = [];
+            
+            // Détection du séparateur
+            const firstLine = lines[0];
+            const semicolonCount = (firstLine.match(/;/g) || []).length;
+            const commaCount = (firstLine.match(/,/g) || []).length;
+            const separator = semicolonCount > commaCount ? ';' : ',';
+            
+            console.log(`Séparateur détecté: "${separator}"`);
+            
+            // Parse headers
+            const headers = lines[0].split(separator).map(h => h.trim().replace(/"/g, ''));
+            console.log('Headers:', headers);
+            
+            // Parse data
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const values = line.split(separator).map(v => v.trim().replace(/"/g, ''));
+                const row = {};
+                
+                headers.forEach((header, index) => {
+                    row[header] = values[index] || '';
+                });
+                
+                result.push(row);
+            }
+            
+            return { headers, data: result };
+        }
+
+        // Chargement des données
+        fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSMnsitY5AEjCzMz2hPNgOzAJThdDqkMFG5bKVnlg2s7uC9D8FZQpldA4NtwAv5hT7GdiT6EnMENFz5/pub?output=csv")
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.text();
+            })
+            .then(csvText => {
+                console.log("CSV reçu, taille:", csvText.length);
+                
+                const parsed = parseCSV(csvText);
+                rawData = parsed.data;
+                
+                console.log("Données parsées:", parsed.data.length, "lignes");
+                
+                // Traitement des données
+                data = parsed.data.map((row, index) => {
+                    let code_postal = '';
+                    let commune = '';
+                    let horaires = [];
+                    
+                    // Recherche du code postal
+                    for (let key in row) {
+                        const lowerKey = key.toLowerCase();
+                        if (lowerKey.includes('code') && lowerKey.includes('postal') ||
+                            lowerKey.includes('cp') || 
+                            lowerKey === 'code postal') {
+                            code_postal = row[key];
+                            break;
+                        }
+                    }
+                    
+                    // Recherche de la commune
+                    for (let key in row) {
+                        const lowerKey = key.toLowerCase();
+                        if (lowerKey.includes('commune') || 
+                            lowerKey.includes('ville') || 
+                            lowerKey.includes('nom') ||
+                            lowerKey === 'commune') {
+                            commune = row[key];
+                            break;
+                        }
+                    }
+                    
+                    // Recherche des plages horaires
+                    for (let key in row) {
+                        const lowerKey = key.toLowerCase();
+                        const value = row[key];
+                        
+                        if (value && value.trim() && 
+                            (lowerKey.includes('plage') || 
+                             lowerKey.includes('horaire') || 
+                             lowerKey.includes('heure') ||
+                             lowerKey.match(/^plage\s*\d/) ||
+                             value.match(/\d{1,2}:\d{2}.*\d{1,2}:\d{2}/))) {
+                            
+                            let plage = value.trim();
+                            plage = plage.replace(/^(plage\s*:?\s*)/i, '');
+                            
+                            if (plage && plage.length > 3 && !plage.toLowerCase().includes('plage horaire')) {
+                                horaires.push(plage);
+                            }
+                        }
+                    }
+                    
+                    return {
+                        code_postal: code_postal?.toString().trim() || '',
+                        commune: commune?.toString().toLowerCase().trim() || '',
+                        commune_display: commune?.toString().trim() || '',
+                        horaires: horaires,
+                        raw: row
+                    };
+                }).filter(entry => entry.code_postal || entry.commune);
+
+                dataLoaded = true;
+                document.getElementById("status").innerHTML = `✅ <strong>${data.length}</strong> communes chargées - Prêt à rechercher !`;
+                document.getElementById("status").className = "status ready";
+                
+                console.log(`${data.length} communes chargées avec succès`);
+            
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement:', error);
+                           });
+
+   
+
+        // Fonction de recherche améliorée
+        function searchHeures(forceExact = false, exactCommune = "", exactCodePostal = "") {
+            const input = document.getElementById("search").value.trim().toLowerCase();
+            const result = document.getElementById("result");
+            
+            if (!dataLoaded) {
+                result.innerHTML = `
+                    <div class="no-data">
+                        <div class="loader"></div>
+                        <p>Les données ne sont pas encore chargées. Veuillez patienter...</p>
+                    </div>`;
+                return;
+            }
+            
+            if (!input) {
+                result.innerHTML = `
+                    <div class="no-data">
+                        <p>🔍 Veuillez entrer une commune ou un code postal pour commencer</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Exemples: Paris, Lyon, 75001, 69000...</p>
+                    </div>`;
+                                return;
+            }
+
+            console.log("Recherche pour:", input);
+            
+            const matches = data.filter(row => {
+    if (forceExact) {
+        return row.commune === exactCommune.toLowerCase() && row.code_postal === exactCodePostal;
+    }
+
+    const matchCP = row.code_postal && row.code_postal.toString().includes(input);
+    const matchCommune = row.commune && row.commune.includes(input);
+    const matchCommuneExact = row.commune && row.commune === input;
+    
+    return matchCP || matchCommune || matchCommuneExact;
+});
+            console.log("Résultats trouvés:", matches.length);
+
+            if (matches.length > 0) {
+                result.innerHTML = matches.map(match => {
+                    if (match.horaires.length === 0) {
+                        return `
+                            <div class="result-item slide-in">
+                                <div class="city-header">
+                                    <div class="city-name">🏘️ ${capitalize(match.commune_display)}</div>
+                                    <div class="postal-code">${match.code_postal}</div>
+                                </div>
+                                <div class="no-data">
+                                    <p>⚠️ Aucune plage horaire disponible pour cette commune</p>
+                                    <p style="font-size: 12px; margin-top: 8px;">Les données peuvent ne pas être disponibles pour toutes les communes</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    return `
+                        <div class="result-item slide-in">
+                            <div class="city-header">
+                                <div class="city-name">🏘️ ${capitalize(match.commune_display)}</div>
+                                <div class="postal-code">${match.code_postal}</div>
+                            </div>
+                            <div class="time-slots">
+                                ${match.horaires.map((horaire, index) => `
+                                    <div class="time-slot">
+                                        <div class="slot-number">${index + 1}</div>
+                                        <div class="slot-time">${horaire}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+                
+                result.classList.add('fade-in');
+                setTimeout(() => result.classList.remove('fade-in'), 600);
+            } else {
+                // Recherche de suggestions
+                const suggestions = data.filter(row => 
+                    row.commune.includes(input.substring(0, 3)) || 
+                    row.code_postal.startsWith(input.substring(0, 2))
+                ).slice(0, 8);
+                
+                result.innerHTML = `
+                    <div class="no-data fade-in">
+                        <p>❌ Aucun résultat trouvé pour "<strong>${input}</strong>"</p>
+                        <p style="font-size: 14px; margin-top: 10px; color: #777;">
+                            Vérifiez l'orthographe ou essayez avec le code postal complet
+                        </p>
+                    </div>
+                    ${suggestions.length > 0 ? `
+                        <div class="suggestions fade-in">
+                            <h4>💡 Suggestions :</h4>
+                            <div>
+                                ${suggestions.map(s => 
+                                    `<span class="suggestion-item" onclick="selectSuggestion('${s.commune_display}', '${s.code_postal}')">${capitalize(s.commune_display)} (${s.code_postal})</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+            }
+            
+        }
+
+        // Fonction pour sélectionner une suggestion
+        function selectSuggestion(commune, codePostal) {
+            document.getElementById("search").value = commune;
+searchHeures(true, commune, codePostal);
+
+        }
+
+        // Fonction pour mettre en forme les noms
+        function capitalize(str) {
+            if (!str) return '';
+            return str
+                .toLowerCase()
+                .split(" ")
+                .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(" ");
+        }
+
+        // Recherche sur appui de la touche Entrée
+        document.getElementById("search").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                searchHeures();
+            }
+        });
+
+        // Auto-focus sur le champ de recherche
+        window.addEventListener('load', () => {
+            document.getElementById('search').focus();
+        });
+        document.getElementById("search").addEventListener("input", function(e) {
+    const input = e.target.value.trim().toLowerCase();
+    const list = document.getElementById("autocomplete-list");
+    list.innerHTML = "";
+
+    if (!input || input.length < 2 || !dataLoaded) return;
+
+    const suggestions = data
+    .filter(item => {
+        const commune = item.commune?.toLowerCase() || "";
+        const codePostal = item.code_postal?.toString() || "";
+        return commune.startsWith(input) || codePostal.startsWith(input);
+    })
+    .sort((a, b) => a.commune.localeCompare(b.commune))
+    .slice(0, 8);
+
+
+    suggestions.forEach(suggestion => {
+        const li = document.createElement("li");
+        li.textContent = `${capitalize(suggestion.commune_display)} (${suggestion.code_postal})`;
+        li.addEventListener("click", () => {
+    document.getElementById("search").value = suggestion.commune_display;
+    list.innerHTML = "";
+    searchHeures(true, suggestion.commune_display, suggestion.code_postal);
+});
+        list.appendChild(li);
+    });
+});
+
+// Fermer la liste si on clique ailleurs
+document.addEventListener("click", function(e) {
+    if (!e.target.closest("#search") && !e.target.closest("#autocomplete-list")) {
+        document.getElementById("autocomplete-list").innerHTML = "";
+    }
+});
+
+    </script>
+</body>
+</html>
+
+
