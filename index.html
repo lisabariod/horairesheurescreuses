@@ -539,7 +539,7 @@ fetch("heures_creuses_communes.json") // mets ici le chemin si le fichier est da
                             <div class="time-slots">
                                 ${match.horaires.map((horaire, index) => `
                                     <div class="time-slot">
-                                        <div class="slot-number">${index + 1}</div>
+                                        <div class="slot-number">Plage ${index + 1}</div>
                                         <div class="slot-time">${horaire}</div>
                                     </div>
                                 `).join('')}
