@@ -264,18 +264,24 @@
         }
 
         .slot-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-radius: 50%;
-            font-weight: 700;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.1;
+    text-align: center;
+}
+
+.slot-number strong {
+    font-size: 16px;
+}
 
         .slot-time {
             font-weight: 600;
@@ -539,7 +545,7 @@ fetch("heures_creuses_communes.json") // mets ici le chemin si le fichier est da
                             <div class="time-slots">
                                 ${match.horaires.map((horaire, index) => `
                                     <div class="time-slot">
-                                        <div class="slot-number">Plage ${index + 1}</div>
+                                        <div class="slot-number"><span>Plage</span><strong>${index + 1}</strong></div>
                                         <div class="slot-time">${horaire}</div>
                                     </div>
                                 `).join('')}
