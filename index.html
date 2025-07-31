@@ -470,7 +470,7 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
 
 
     dataLoaded = true;
-    document.getElementById("status").innerHTML = `✅ <strong>${data.length}</strong> communes chargées - Prêt à rechercher !`;
+    document.getElementById("status").innerHTML = `✅ <strong>${data.length}</strong> communes prêtes à être recherchées !`;
     document.getElementById("status").className = "status ready";
     console.log(`${data.length} communes chargées depuis JSON`);
   })
