@@ -587,23 +587,23 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
 
                 
                 result.innerHTML = `
-                    <div class="no-data fade-in">
-                        <p>❌ Aucun résultat trouvé pour "<strong>${input}</strong>"</p>
-                        <p style="font-size: 14px; margin-top: 10px; color: #777;">
-                            Vérifiez l'orthographe ou essayez avec le code postal complet
-                        </p>
-                    </div>
-                    ${suggestions.length > 0 ? `
-                        <div class="suggestions fade-in">
-                            <h4>💡 Suggestions :</h4>
-                            <div>
-                                ${suggestions.map(s => 
-                                    `<span class="suggestion-item" onclick="selectSuggestion('${s.commune_display}', '${s.code_postal}')">${capitalize(s.commune_display)} (${s.code_postal})</span>`
-                                ).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                `;
+    <div class="no-data fade-in">
+        <p>❌ Aucun résultat trouvé pour "<strong>${input}</strong>"</p>
+        <p style="font-size: 14px; margin-top: 10px; color: #777;">
+            Nous n'avons pas trouvé votre ville. Essayez avec une autre orthographe ou utilisez le code postal complet.
+        </p>
+    </div>
+    ${suggestions.length > 0 ? `
+        <div class="suggestions fade-in">
+            <h4>💡 Suggestions :</h4>
+            <div>
+                ${suggestions.map(s => 
+                    `<span class="suggestion-item" onclick="selectSuggestion('${s.commune_display}', '${s.code_postal}')">${capitalize(s.commune_display)} (${s.code_postal})</span>`
+                ).join('')}
+            </div>
+        </div>
+    ` : ''}
+`;
             }
             
         }
