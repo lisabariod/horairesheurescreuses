@@ -478,12 +478,26 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
     document.getElementById("status").className = "status error";
   });
 
+        // Pour avoir une tolérance sur les accents, tirets, apostrophes et les st
+        function normalizeString(str) {
+            if (!str) return "";
+            return str
+                .normalize("NFD")                    // décompose accents
+                .replace(/[\u0300-\u036f]/g, "")     // supprime accents
+                .toLowerCase()
+                .replace(/'/g, "")                   // enlève apostrophes
+                .replace(/-/g, " ")                  // remplace tirets par espaces
+                .replace(/\bst\b/g, "saint")         // st -> saint
+                .replace(/\bsainte?\b/g, "sainte")   // harmonise sainte
+                .replace(/\s+/g, " ")                // espaces multiples -> 1
+                .trim();
+        }
 
    
 
         // Fonction de recherche améliorée
         function searchHeures(forceExact = false, exactCommune = "", exactCodePostal = "") {
-            const input = document.getElementById("search").value.trim().toLowerCase();
+            const input = normalizeString(document.getElementById("search").value);
             const result = document.getElementById("result");
             
             if (!dataLoaded) {
@@ -508,14 +522,18 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
             
             const matches = data.filter(row => {
     if (forceExact) {
-        return row.commune === exactCommune.toLowerCase() && row.code_postal === exactCodePostal;
+        return (
+    normalizeString(row.commune) === normalizeString(exactCommune) &&
+    row.code_postal === exactCodePostal
+);
+
     }
 
-    const matchCP = row.code_postal && row.code_postal.toString().includes(input);
-    const matchCommune = row.commune && row.commune.includes(input);
-    const matchCommuneExact = row.commune && row.commune === input;
-    
-    return matchCP || matchCommune || matchCommuneExact;
+            const communeNorm = normalizeString(row.commune);
+            const cp = row.code_postal.toString();
+            
+            return communeNorm.includes(input) || cp.includes(input);
+
 });
             console.log("Résultats trouvés:", matches.length);
 
@@ -626,9 +644,9 @@ searchHeures(true, commune, codePostal);
 
     const suggestions = data
     .filter(item => {
-        const commune = item.commune?.toLowerCase() || "";
+        const communeNorm = normalizeString(item.commune);
         const codePostal = item.code_postal?.toString() || "";
-        return commune.startsWith(input) || codePostal.startsWith(input);
+        return communeNorm.startsWith(input) || codePostal.startsWith(input);
     })
     .sort((a, b) => a.commune.localeCompare(b.commune))
     .slice(0, 8);
