@@ -461,11 +461,13 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
   })
   .then(json => {
     data = json.map(item => ({
-      commune: item.commune,
-      commune_display: item.commune,
-      code_postal: item.code_postal,
-      horaires: item.horaires
-    }));
+  commune: item.commune,
+  commune_display: item.commune,
+  commune_norm: normalizeString(item.commune),
+  code_postal: item.code_postal,
+  horaires: item.horaires
+}));
+
 
     dataLoaded = true;
     document.getElementById("status").innerHTML = `✅ <strong>${data.length}</strong> communes chargées - Prêt à rechercher !`;
@@ -480,17 +482,18 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
 
         // Pour avoir une tolérance sur les accents, tirets, apostrophes et les st
            function normalizeString(str) {
-        if (!str) return "";
-        return str
-            .normalize("NFD")                         // décomposer caractères accentués
-            .replace(/[\u0300-\u036f]/g, "")          // supprimer les accents
-            .toLowerCase()
-            .replace(/['’]/g, " ")                    // apostrophes → espace
-            .replace(/-/g, " ")                       // tirets → espace
-            .replace(/\bste?s?\.?\b/g, "sainte")      // st, ste, st., ste. → sainte
-            .replace(/\s+/g, " ")                     // espaces multiples → un seul
-            .trim();
-    }
+    if (!str) return "";
+    return str
+        .normalize("NFD")                         // décomposer les accents
+        .replace(/[\u0300-\u036f]/g, "")          // supprimer accents
+        .toLowerCase()
+        .replace(/['’]/g, " ")                    // apostrophes -> espace
+        .replace(/-/g, " ")                       // tirets -> espace
+        .replace(/\bst\b|ste\b|st\.\b|ste\.\b/g, "sainte") // st/ste/st./ste. -> sainte
+        .replace(/\s+/g, " ")                     // plusieurs espaces -> un
+        .trim();
+}
+
 
 
    
@@ -523,13 +526,14 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
             const matches = data.filter(row => {
     if (forceExact) {
         return (
-    normalizeString(row.commune) === normalizeString(exactCommune) &&
-    row.code_postal === exactCodePostal
+  row.commune_norm === normalizeString(exactCommune) &&
+  row.code_postal === exactCodePostal
 );
+
 
     }
 
-            const communeNorm = normalizeString(row.commune);
+            const communeNorm = row.commune_norm;
             const cp = row.code_postal.toString();
             
             return communeNorm.includes(input) || cp.includes(input);
@@ -645,7 +649,7 @@ searchHeures(true, commune, codePostal);
 
     const suggestions = data
     .filter(item => {
-        const communeNorm = normalizeString(item.commune);
+        const communeNorm = item.commune_norm;
         const codePostal = item.code_postal?.toString() || "";
         return communeNorm.startsWith(input) || codePostal.startsWith(input);
     })
