@@ -454,7 +454,7 @@
      //   let rawData = []; // plus utilisé
 
         // Chargement des données depuis le JSON
-fetch("heures_creuses_communes.json") // mets ici le chemin si le fichier est dans un sous-dossier
+fetch("heures_creuses_communes_clean.json") // mets ici le chemin si le fichier est dans un sous-dossier
   .then(response => {
     if (!response.ok) throw new Error("Erreur de chargement JSON");
     return response.json();
