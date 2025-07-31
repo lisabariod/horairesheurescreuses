@@ -461,7 +461,7 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
   })
   .then(json => {
     data = json.map(item => ({
-      commune: item.commune.toLowerCase(),
+      commune: item.commune,
       commune_display: item.commune,
       code_postal: item.code_postal,
       horaires: item.horaires
