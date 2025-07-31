@@ -499,7 +499,7 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
         .toLowerCase()
         .replace(/['’]/g, " ")                    // apostrophes -> espace
         .replace(/-/g, " ")                       // tirets -> espace
-        .replace(/\bst\b|ste\b|st\.\b|ste\.\b/g, "sainte") // st/ste/st./ste. -> sainte
+        .replace(/\bst\b|ste\b|st\.\b|ste\.\b/g, "saint") // st/ste/st./ste. -> saint
         .replace(/\s+/g, " ")                     // plusieurs espaces -> un
         .trim();
 }
