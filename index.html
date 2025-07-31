@@ -581,9 +581,10 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
             } else {
                 // Recherche de suggestions
                 const suggestions = data.filter(row => 
-                    row.commune.includes(input.substring(0, 3)) || 
+                    normalizeString(row.commune).includes(input.substring(0, 3)) || 
                     row.code_postal.startsWith(input.substring(0, 2))
                 ).slice(0, 8);
+
                 
                 result.innerHTML = `
                     <div class="no-data fade-in">
