@@ -586,18 +586,19 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
                                 <div class="city-name">🏘️ ${capitalize(match.commune_display)}</div>
                                 <div class="postal-code">${match.code_postal}</div>
                             </div>
-                            <div class="time-slots">
-                                ${match.horaires.map((horaire, index) => {
-    const sousPlages = horaire.split(";").map(s => s.trim()).join(" / ");
-    return `
-                            <div class="time-slot">
-                                <div class="slot-label"><strong>Plage</strong></div>
-                                <div class="slot-number">${index + 1}</div>
-                                <div class="slot-time">${sousPlages}</div>
-                            </div>
-                        `;
-                    }).join('')}
-                            </div>
+                        <div class="time-slots">
+                            ${match.horaires.map((horaire, index) => {
+                                const sousPlages = horaire.split(";").map(s => s.trim()).join(" / ");
+                                return `
+                                    <div class="time-slot">
+                                        <div class="slot-number">
+                                            Plage <strong>${index + 1}</strong>
+                                        </div>
+                                        <div class="slot-time">${sousPlages}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
                         </div>
                     `;
                 }).join("");
