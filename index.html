@@ -669,7 +669,7 @@ document.getElementById("search").addEventListener("input", function(e) {
         const li = document.createElement("li");
         li.textContent = `${capitalize(suggestion.commune_display)} (${suggestion.code_postal})`;
         li.addEventListener("click", () => {
-            document.getElementById("search").value = suggestion.commune_display;
+            document.getElementById("search").value = capitalize(suggestion.commune_display);
             list.innerHTML = "";
             searchHeures(true, suggestion.commune_display, suggestion.code_postal);
         });
