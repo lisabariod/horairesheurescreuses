@@ -247,24 +247,14 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
-        .slot-number {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
+        .slot-label {
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1.1;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
     text-align: center;
-}
-
-.slot-number strong {
-    font-size: 16px;
 }
 
         .slot-time {
@@ -580,17 +570,17 @@ fetch("enedis_heures_creuses_communes.json") // mets ici le chemin si le fichier
                                 <div class="postal-code">${match.code_postal}</div>
                             </div>
                             <div class="time-slots">
-                                ${match.horaires.map((horaire, index) => {
-    const sousPlages = horaire.split(";").map(s => s.trim()).join(" / ");
-    return `
-                            <div class="time-slot">
-                                <div class="slot-label"><strong>Plage</strong> *</div>
-                                <div class="slot-number">${index + 1}</div>
-                                <div class="slot-time">${sousPlages}</div>
-                            </div>
-                        `;
-                    }).join('')}
-                            </div>
+                            ${match.horaires.map((horaire, index) => {
+                                const sousPlages = horaire.split(";").map(s => s.trim()).join(" / ");
+                                return `
+                                    <div class="time-slot">
+                                        <div class="slot-label"><strong>Plage</strong> *</div>
+                                        <div class="slot-number">${index + 1}</div>
+                                        <div class="slot-time">${sousPlages}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
                         </div>
                     `;
                 }).join("");
