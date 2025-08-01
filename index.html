@@ -197,22 +197,19 @@
             font-size: 16px;
         }
 
-                /* Règle N°1 : Le style PAR DÉFAUT des blocs de résultats */
         .result-item {
-            margin-bottom: 30px;
-            padding: 25px;
-            /* On met ici le fond que vous préférez de manière permanente */
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.08));
-            border-radius: 20px;
-            border-left: 5px solid #667eea;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.05));
+            border-radius: 20px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
-        
-        /* Règle N°2 : Le survol des blocs de résultats (SANS changement de couleur) */
+
         .result-item:hover {
-            /* Il n'y a plus de ligne "background" ici, donc la couleur ne change pas */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.08));
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .city-header {
@@ -243,25 +240,22 @@
             gap: 12px;
         }
 
-        /* Règle N°3 : Le style PAR DÉFAUT des plages horaires */
-.time-slot {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    /* On met ici le fond blanc opaque de manière permanente */
-    background: rgba(255, 255, 255, 1);
-    padding: 16px 20px;
-    border-radius: 15px;
-    border-left: 4px solid #667eea;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
+        .time-slot {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 16px 20px;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
 
-/* Règle N°4 : Le survol des plages horaires (SANS changement de couleur) */
-.time-slot:hover {
-    /* Il n'y a plus de ligne "background" ici */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
+        .time-slot:hover {
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
 
         .slot-number {
     display: flex;
@@ -586,19 +580,18 @@ fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier 
                                 <div class="city-name">🏘️ ${capitalize(match.commune_display)}</div>
                                 <div class="postal-code">${match.code_postal}</div>
                             </div>
-                        <div class="time-slots">
-                            ${match.horaires.map((horaire, index) => {
-                                const sousPlages = horaire.split(";").map(s => s.trim()).join(" / ");
-                                return `
-                                    <div class="time-slot">
-                                        <div class="slot-number">
-                                            Plage <strong>${index + 1}</strong>
-                                        </div>
-                                        <div class="slot-time">${sousPlages}</div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
+                            <div class="time-slots">
+                                ${match.horaires.map((horaire, index) => {
+    const sousPlages = horaire.split(";").map(s => s.trim()).join(" / ");
+    return `
+                            <div class="time-slot">
+                                <div class="slot-label"><strong>Plage</strong></div>
+                                <div class="slot-number">${index + 1}</div>
+                                <div class="slot-time">${sousPlages}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                            </div>
                         </div>
                     `;
                 }).join("");
@@ -706,5 +699,3 @@ document.addEventListener("click", function(e) {
     </script>
 </body>
 </html>
-
-
