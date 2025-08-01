@@ -441,7 +441,7 @@ h1 img {
 
             <p class="subtitle">Trouvez facilement vos plages horaires d'heures creuses</p>
             <br>
-            <p class="disclaimer">* Les horaires d'heures creuses peuvent varier d'une commune à une autre. Dans chaque commune il peut également y avoir différentes plages horaires selon votre adresse.</p>
+            <p class="disclaimer">* Les horaires d'heures creuses peuvent varier d'une commune à une autre. Dans chaque commune, il peut également y avoir différentes plages horaires selon votre adresse.</p>
         </div>
         
         <div id="status" class="status loading">
@@ -584,7 +584,7 @@ fetch("enedis_heures_creuses_communes.json") // mets ici le chemin si le fichier
     const sousPlages = horaire.split(";").map(s => s.trim()).join(" / ");
     return `
                             <div class="time-slot">
-                                <div class="slot-label"><strong>Plage</strong></div>
+                                <div class="slot-label"><strong>Plage*</strong></div>
                                 <div class="slot-number">${index + 1}</div>
                                 <div class="slot-time">${sousPlages}</div>
                             </div>
