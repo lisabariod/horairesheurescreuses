@@ -57,7 +57,6 @@
             color: #333;
             font-size: 2.5em;
             font-weight: 700;
-            background-clip: text;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -645,43 +644,42 @@ searchHeures(true, commune, codePostal);
             }
         });
 
-        // Auto-focus sur le champ de recherche
-        window.addEventListener('load', () => {
-        document.getElementById("search").addEventListener("input", function(e) {
-        // La seule ligne qui change est la suivante :
-        const input = normalizeString(e.target.value);
-        
-        const list = document.getElementById("autocomplete-list");
+        // Auto-focus sur le champ de recherche au chargement de la page
+window.addEventListener('load', () => {
+    document.getElementById('search').focus();
+});
+
+// Autocomplétion quand l'utilisateur tape du texte dans la barre de recherche
+document.getElementById("search").addEventListener("input", function(e) {
+    const input = normalizeString(e.target.value);
+    const list = document.getElementById("autocomplete-list");
+    list.innerHTML = "";
+
+    if (!input || input.length < 2 || !dataLoaded) {
         list.innerHTML = "";
-    
-        // On garde la condition pour ne pas afficher la liste si le champ est vide
-        if (!input || input.length < 2 || !dataLoaded) {
-            list.innerHTML = ""; // Assurez-vous que la liste est bien vide
-            return;
-        }
-    
-        const suggestions = data
-            .filter(item => {
-                const communeNorm = item.commune_norm;
-                const codePostal = item.code_postal?.toString() || "";
-                // La comparaison se fait maintenant entre deux chaînes normalisées
-                return communeNorm.includes(input) || codePostal.startsWith(input);
-            })
-            .sort((a, b) => a.commune.localeCompare(b.commune))
-            .slice(0, 8);
-    
-    
-        suggestions.forEach(suggestion => {
-            const li = document.createElement("li");
-            li.textContent = `${capitalize(suggestion.commune_display)} (${suggestion.code_postal})`;
-            li.addEventListener("click", () => {
-                document.getElementById("search").value = suggestion.commune_display;
-                list.innerHTML = "";
-                searchHeures(true, suggestion.commune_display, suggestion.code_postal);
-            });
-            list.appendChild(li);
+        return;
+    }
+
+    const suggestions = data
+        .filter(item => {
+            const communeNorm = item.commune_norm;
+            const codePostal = item.code_postal?.toString() || "";
+            return communeNorm.includes(input) || codePostal.startsWith(input);
+        })
+        .sort((a, b) => a.commune.localeCompare(b.commune))
+        .slice(0, 8);
+
+    suggestions.forEach(suggestion => {
+        const li = document.createElement("li");
+        li.textContent = `${capitalize(suggestion.commune_display)} (${suggestion.code_postal})`;
+        li.addEventListener("click", () => {
+            document.getElementById("search").value = suggestion.commune_display;
+            list.innerHTML = "";
+            searchHeures(true, suggestion.commune_display, suggestion.code_postal);
         });
+        list.appendChild(li);
     });
+});
 
 // Fermer la liste si on clique ailleurs
 document.addEventListener("click", function(e) {
