@@ -328,6 +328,13 @@
             animation: spin 1s linear infinite;
             margin-right: 10px;
         }
+        .disclaimer {
+    color: #666;        /* Même couleur que le sous-titre */
+    font-size: 0.9em;   /* Plus petit que le 1.1em du sous-titre */
+    font-style: italic; /* Texte en italique */
+    opacity: 0.7;       /* Un peu plus discret */
+    margin-top: 5px;    /* Un peu d'espace au-dessus */
+}
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -434,7 +441,7 @@ h1 img {
 
             <p class="subtitle">Trouvez facilement vos plages horaires d'heures creuses</p>
             <br>
-            <p class="subtitle"><em>* Les horaires d'heures creuses peuvent varier d'une comune à une autre. Dans chaque commune il peut égalment y avoir différentes plages horaires selon votre adresse.</em></p>
+            <p class="disclaimer">* Les horaires d'heures creuses peuvent varier d'une commune à une autre. Dans chaque commune il peut également y avoir différentes plages horaires selon votre adresse.</p>
         </div>
         
         <div id="status" class="status loading">
