@@ -574,7 +574,7 @@ fetch("enedis_heures_creuses_communes.json") // mets ici le chemin si le fichier
                                 const sousPlages = horaire.split(";").map(s => s.trim()).join(" / ");
                                 return `
                                     <div class="time-slot">
-                                        <span class="slot-label">Plage<sup>*</sup> ${index + 1}</span>
+                                        <span class="slot-label">Plage ${index + 1} *</span>
                                         <span class="slot-time">${sousPlages}</span>
                                     </div>
                                 `;
