@@ -460,7 +460,7 @@ h1 img {
      //   let rawData = []; // plus utilisé
 
         // Chargement des données depuis le JSON
-fetch("enedis_heures_creuses_formate.json") // mets ici le chemin si le fichier est dans un sous-dossier
+fetch("enedis_heures_creuses_communes.json") // mets ici le chemin si le fichier est dans un sous-dossier
   .then(response => {
     if (!response.ok) throw new Error("Erreur de chargement JSON");
     return response.json();
