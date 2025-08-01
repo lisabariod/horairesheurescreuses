@@ -421,7 +421,16 @@ h1 img {
     vertical-align: middle;
     filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
 }
-
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
     </style>
 </head>
 <body>
@@ -445,6 +454,7 @@ h1 img {
         
         <div class="search-container">
             <div class="search-wrapper">
+                <label for="search" class="visually-hidden">Recherche par commune ou code postal</label>
                 <input type="text" id="search" placeholder="🔍 Commune ou code postal (ex: Paris, 75001...)" />
                 <ul id="autocomplete-list" class="autocomplete-list"></ul>
                 <button class="search-btn" onclick="searchHeures()">
