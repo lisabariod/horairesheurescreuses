@@ -153,12 +153,6 @@
             border: 1px solid rgba(255, 193, 7, 0.3);
         }
 
-        .status.ready {
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.1));
-            color: #2e7d32;
-            border: 1px solid rgba(76, 175, 80, 0.3);
-        }
-
         .status.error {
             background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(229, 57, 53, 0.1));
             color: #c62828;
@@ -516,19 +510,18 @@ fetch("enedis_heures_creuses_communes.json") // mets ici le chemin si le fichier
   })
   .then(json => {
     data = json.map(item => ({
-  commune: item.commune,
-  commune_display: item.commune,
-  commune_norm: normalizeString(item.commune),
-  code_postal: item.code_postal,
-  horaires: item.horaires
-}));
-
+        commune: item.commune,
+        commune_display: item.commune,
+        commune_norm: normalizeString(item.commune),
+        code_postal: item.code_postal,
+        horaires: item.horaires
+    }));
 
     dataLoaded = true;
     document.getElementById("status").innerHTML = `✅ <strong>${data.length}</strong> communes prêtes à être recherchées !`;
     document.getElementById("status").className = "status ready";
     console.log(`${data.length} communes chargées depuis JSON`);
-  })
+})
   .catch(error => {
     console.error("Erreur JSON :", error);
     document.getElementById("status").innerHTML = `❌ Erreur de chargement des données`;
