@@ -312,10 +312,7 @@
 
 /* Le conteneur principal qui va centrer notre icône */
 .info-tooltip-container {
-    position: relative; /* Essentiel pour positionner la bulle par rapport à l'icône */
-    display: flex;
-    justify-content: center;
-    margin-top: 15px; /* Un peu d'espace au-dessus */
+    position: relative; /* On garde juste cette ligne importante */
 }
 
 /* L'icône "i" elle-même */
@@ -382,7 +379,13 @@
     background-color: #5A52FF; /* La couleur de votre dégradé */
     color: white;
 }
-
+/* Nouveau conteneur pour aligner le sous-titre et l'icône */
+.subtitle-container {
+    display: flex;
+    justify-content: center; /* Centre le groupe horizontalement */
+    align-items: center;     /* Aligne le texte et l'icône verticalement */
+    gap: 8px;                /* Ajoute un petit espace entre le texte et l'icône */
+}
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
