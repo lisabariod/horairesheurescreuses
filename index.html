@@ -322,34 +322,53 @@
             100% { transform: rotate(360deg); }
         }
 
-        @media (max-width: 768px) {
-    .container {
-        padding: 25px 20px; /* MODIFIÉ : Moins de padding en haut/bas */
+       @media (max-width: 768px) {
+    body {
+        padding: 10px;
     }
 
-    /* NOUVEAU : Réduction du padding pour les résultats */
-    .result-item {
-        padding: 20px;
+    .container {
+        padding: 20px 15px;
     }
 
     .search-wrapper {
         flex-direction: column;
+        gap: 12px;
     }
 
     #search, .search-btn {
         width: 100%;
+        padding-top: 16px;
+        padding-bottom: 16px;
     }
 
     h1 {
-        font-size: 1.8em; /* MODIFIÉ : Titre un peu plus petit */
+        font-size: 2em;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
+        line-height: 1.2;
     }
     
-    /* NOUVEAU : Ajustement des polices secondaires */
-    .subtitle, .disclaimer {
-        font-size: 1em;
+    h1 img {
+        width: 45px;
+        height: 45px;
     }
+
+    .subtitle, .disclaimer {
+        font-size: 0.9em;
+    }
+    
+    #result {
+        padding: 0;
+        background: transparent;
+        border: none;
+    }
+
+    .result-item {
+        padding: 20px 15px;
+        margin-bottom: 15px;
+    }
+
     .city-name {
         font-size: 1.2em;
     }
@@ -360,11 +379,21 @@
         gap: 8px;
     }
 
-    /* NOUVEAU : La règle la plus importante pour empiler les plages horaires */
     .time-slot {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
+        padding: 12px 15px;
+    }
+    
+    .slot-label {
+        padding: 4px 12px;
+        font-size: 13px;
+    }
+
+    .autocomplete-list {
+        max-height: 150px;
+        font-size: 15px;
     }
 }
 
