@@ -308,6 +308,80 @@
     margin-top: 5px;    /* Un peu d'espace au-dessus */
     font-weight: 400;
 }
+        /* --- Style pour la bulle d'information --- */
+
+/* Le conteneur principal qui va centrer notre icône */
+.info-tooltip-container {
+    position: relative; /* Essentiel pour positionner la bulle par rapport à l'icône */
+    display: flex;
+    justify-content: center;
+    margin-top: 15px; /* Un peu d'espace au-dessus */
+}
+
+/* L'icône "i" elle-même */
+.info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background-color: #e0e0e0; /* Un gris clair */
+    color: #757575; /* Un gris plus foncé pour le "i" */
+    border-radius: 50%; /* Pour en faire un cercle */
+    font-size: 14px;
+    font-weight: 700;
+    cursor: help; /* Change le curseur pour indiquer une aide */
+    transition: background-color 0.3s;
+}
+
+/* La bulle d'info (cachée par défaut) */
+.tooltip-text {
+    position: absolute;
+    bottom: 130%; /* Se positionne au-dessus de l'icône */
+    left: 50%;
+    transform: translateX(-50%); /* Astuce pour centrer parfaitement */
+    
+    background-color: #333; /* Fond sombre */
+    color: #fff; /* Texte blanc */
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    
+    width: 280px; /* Largeur de la bulle */
+    font-size: 13px;
+    font-weight: 400; /* Texte en normal */
+    text-align: center;
+    
+    /* L'animation d'apparition */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 20; /* S'assure qu'elle passe au-dessus des autres éléments */
+}
+
+/* La petite flèche sous la bulle (créée avec un pseudo-élément) */
+.tooltip-text::after {
+    content: '';
+    position: absolute;
+    top: 100%; /* Se place juste en dessous de la bulle */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent; /* Crée un triangle pointant vers le bas */
+}
+
+/* L'APPARITION AU SURVOL */
+.info-tooltip-container:hover .tooltip-text {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Petit effet bonus : l'icône change de couleur au survol */
+.info-tooltip-container:hover .info-icon {
+    background-color: #5A52FF; /* La couleur de votre dégradé */
+    color: white;
+}
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -469,7 +543,12 @@ h1 img {
 
             <p class="subtitle">Trouvez facilement vos plages horaires d'heures creuses</p>
             <br>
-            <p class="disclaimer"> Les horaires d'heures creuses peuvent varier d'une commune à une autre. Dans chaque commune, il peut également y avoir différentes plages horaires selon votre adresse exacte.</p>
+            <div class="info-tooltip-container">
+    <span class="info-icon">i</span>
+    <span class="tooltip-text">
+        Les horaires d'heures creuses peuvent varier d'une commune à une autre. Dans chaque commune, il peut également y avoir différentes plages horaires selon votre adresse exacte.
+    </span>
+</div>
         </div>
         
         <div id="status" class="status loading">
