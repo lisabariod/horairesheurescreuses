@@ -518,8 +518,7 @@ fetch("enedis_heures_creuses_communes.json") // mets ici le chemin si le fichier
     }));
 
     dataLoaded = true;
-    document.getElementById("status").innerHTML = `✅ <strong>${data.length}</strong> communes prêtes à être recherchées !`;
-    document.getElementById("status").className = "status ready";
+    document.getElementById("status").style.display = 'none';
     console.log(`${data.length} communes chargées depuis JSON`);
 })
   .catch(error => {
