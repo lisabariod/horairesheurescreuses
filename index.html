@@ -650,6 +650,8 @@ fetch("enedis_heures_creuses_communes.json") // mets ici le chemin si le fichier
 
         // Fonction de recherche améliorée
         function searchHeures(forceExact = false, exactCommune = "", exactCodePostal = "") {
+            document.getElementById('autocomplete-list').innerHTML = ''; // <-- LA LIGNE À AJOUTER
+        
             const input = normalizeString(document.getElementById("search").value);
             const result = document.getElementById("result");
             
