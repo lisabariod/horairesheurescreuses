@@ -320,17 +320,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 22px;
-    height: 22px;
-    background-color: #e0e0e0; /* Un gris clair */
-    color: #757575; /* Un gris plus foncé pour le "i" */
-    border-radius: 50%; /* Pour en faire un cercle */
-    font-size: 14px;
-    font-weight: 700;
-    cursor: help; /* Change le curseur pour indiquer une aide */
-    transition: background-color 0.3s;
+    cursor: help;
+    /* La taille est maintenant contrôlée par le SVG lui-même */
 }
-
+.info-icon svg {
+    width: 20px; /* Ajustez la taille de l'icône si besoin */
+    height: 20px;
+    color: #757575; /* Couleur du trait et du point */
+    transition: color 0.3s ease;
+}
 /* La bulle d'info (cachée par défaut) */
 .tooltip-text {
     position: absolute;
@@ -375,9 +373,8 @@
 }
 
 /* Petit effet bonus : l'icône change de couleur au survol */
-.info-tooltip-container:hover .info-icon {
-    background-color: #5A52FF; /* La couleur de votre dégradé */
-    color: white;
+.info-tooltip-container:hover .info-icon svg {
+    color: #5A52FF; /* Le trait et le point deviennent violets au survol */
 }
 /* Nouveau conteneur pour aligner le sous-titre et l'icône */
 .subtitle-container {
@@ -547,7 +544,13 @@ h1 img {
             <div class="subtitle-container">
     <p class="subtitle">Trouvez facilement vos plages horaires d'heures creuses</p>
     <div class="info-tooltip-container">
-        <span class="info-icon">i</span>
+        <span class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+        </span>
         <span class="tooltip-text">
             Les horaires d'heures creuses peuvent varier d'une commune à une autre. Dans chaque commune, il peut également y avoir différentes plages horaires selon votre adresse exacte.
         </span>
